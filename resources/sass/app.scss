@@ -1,0 +1,194 @@
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+// Variables
+@import 'variables';
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+
+*:focus {
+    outline: none !important;
+}
+
+#app {
+    margin-top: 30px;
+
+    .component {
+        margin-bottom: 50px;
+    }
+
+    #search {
+        input {
+        width: 100%;
+        padding: 10px;
+        box-shadow: $box-shadow;
+        border-radius: 10px;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        -ms-border-radius: 10px;
+        -o-border-radius: 10px;
+        border: 5px solid #3490dc;
+        }
+    }
+
+    #filter {
+        button {
+            padding: 9px 20px;
+            border-radius: 20px;
+            -webkit-border-radius: 20px;
+            -moz-border-radius: 20px;
+            -ms-border-radius: 20px;
+            -o-border-radius: 20px;
+            transition: 0.3s;
+            -webkit-transition: 0.3s;
+            -moz-transition: 0.3s;
+            -ms-transition: 0.3s;
+            -o-transition: 0.3s;
+            background-color: $blue;
+            color: #fff;
+
+            &:hover {
+                transform: scale(1.1);
+                -webkit-transform: scale(1.1);
+                -moz-transform: scale(1.1);
+                -ms-transform: scale(1.1);
+                -o-transform: scale(1.1);
+            }
+
+            &:not(:last-child) {
+                margin-right: 20px;
+            }
+        }
+    }
+
+    #movies {
+        .movie {
+            margin-top: 50px;
+
+            .movie__title {
+                margin-bottom: 30px;
+                margin-top: 15px;
+                max-width: 200px;
+                text-align: center;
+            }
+
+            .movie__poster {
+                border-radius: 10px;
+                -webkit-border-radius: 10px;
+                -moz-border-radius: 10px;
+                -ms-border-radius: 10px;
+                -o-border-radius: 10px;
+            }
+
+            .movie__add, .movie__remove {
+                font-size: 32px;
+                font-weight: 700;
+                width: 100px;
+                border-radius: 10px;
+                -webkit-border-radius: 10px;
+                -moz-border-radius: 10px;
+                -ms-border-radius: 10px;
+                -o-border-radius: 10px;
+            }
+
+            .movie__add {
+                background-color: $green;
+            }
+
+            .movie__remove {
+                background-color: $pink;
+            }
+        }
+
+        .pagination {
+            margin-top: 70px;
+            span {
+                font-size: 24px;
+
+                &.pagination__prev, &.pagination__next {
+                    cursor: pointer;
+                }
+                &.pagination__page {
+                    margin: 0 15px;
+                    font-weight: bold;
+                }
+            }
+        }
+    }
+
+    #picked-list {
+        background: #fff;
+        position: fixed;
+        border: 1px solid;
+        padding: 30px 10px;
+        width: 700px;
+        top: 100px;
+        right: -700px;
+        transition: 0.5s;
+        -webkit-transition: 0.5s;
+        -moz-transition: 0.5s;
+        -ms-transition: 0.5s;
+        -o-transition: 0.5s;
+        &.open {
+            right: 0;
+        }
+
+        .picked-list__label {
+            position: absolute;
+            left: -118px;
+            top: 0;
+
+            button {
+                padding: 9px 20px;
+                border-radius: 10px 0 0 10px;
+                -webkit-border-radius: 10px 0 0 10px;
+                -moz-border-radius: 10px 0 0 10px;
+                -ms-border-radius: 10px 0 0 10px;
+                -o-border-radius: 10px 0 0 10px;
+                background-color: $blue;
+                color: #fff;
+                font-size: 24px;
+            }
+        }
+
+        .picked-list__movie {
+            margin-bottom: 30px;
+            .movie__poster {
+                width: 80px;
+                border-radius: 10px;
+                -webkit-border-radius: 10px;
+                -moz-border-radius: 10px;
+                -ms-border-radius: 10px;
+                -o-border-radius: 10px;
+                margin-right: 20px;
+            }
+        }
+
+        .picked-list__container {
+            max-height: 500px;
+            overflow-y: scroll;
+        }
+
+        .picked-list__actions {
+            button {
+                padding: 9px 20px;
+                border-radius: 20px;
+                -webkit-border-radius: 20px;
+                -moz-border-radius: 20px;
+                -ms-border-radius: 20px;
+                -o-border-radius: 20px;
+                background-color: $blue;
+                margin-right: 15px;
+                color: #fff;
+            }
+
+            input {
+                padding: 10px;
+                font-size: 16px;
+                color: $green;
+                width: 55%;
+            }
+        }
+    }
+}
