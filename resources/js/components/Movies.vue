@@ -1,6 +1,5 @@
 <template>
     <div id="movies" class="container component">
-        <h1>{{link}}</h1>
         <search :search="search"></search>
         <filter-buttons :changeFilter="changeFilter"></filter-buttons>
         <div class="row" v-if="this.movies !== false">
@@ -42,7 +41,6 @@ export default {
         if (this.link != '') {
             window.axios.get(`/api/link/get?link=${this.link}`)
             .then((response) => {
-                console.log(response)
                 const movies = response.data.movies
                 movies.forEach(movie => {
                     this.pickMovie(movie.movie_id)
