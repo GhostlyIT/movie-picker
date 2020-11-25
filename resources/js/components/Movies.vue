@@ -1,5 +1,6 @@
 <template>
     <div id="movies" class="container component">
+        <h1>{{link}}</h1>
         <search :search="search"></search>
         <filter-buttons :changeFilter="changeFilter"></filter-buttons>
         <div class="row" v-if="this.movies !== false">
@@ -28,6 +29,7 @@
 
 <script>
 export default {
+    props: ['link'],
     data: () => ({
         movies: false,
         currentPage: 1,
@@ -35,20 +37,24 @@ export default {
         searchQuery: ''
     }),
     mounted() {
-        this.getMovies(this.filter)
+        this.getMovies()
 
-        const params = (new URL(document.location)).searchParams
-        let movieList = params.get("movie_list").split(',').map(el => +el)
-        console.log(movieList)
-        movieList.forEach(movieId => {
-            this.pickMovie(movieId)
-        })
+        if (this.link != '') {
+            window.axios.get(`/api/link/get?link=${this.link}`)
+            .then((response) => {
+                console.log(response)
+                const movies = response.data.movies
+                movies.forEach(movie => {
+                    this.pickMovie(movie.movie_id)
+                })
+            })
+        }
     },
     methods: {
         getMovies() {
-            window.axios.get(`https://api.themoviedb.org/3/movie/${this.filter}?page=${this.currentPage}&api_key=${process.env.MIX_TMDB_KEY}`)
+            window.axios.get(`/api/movies/get?filter=${this.filter}&page=${this.currentPage}`)
             .then((response) => {
-                this.movies = this.filter === 'latest' ? {results: [response.data]} : response.data
+                this.movies = this.filter === 'latest' ? {results: [response.data.movies]} : response.data.movies
             })
             .catch((error) => {
                 console.log(error)
@@ -85,9 +91,9 @@ export default {
             this.filter = 'search'
             this.searchQuery = query
 
-            window.axios.get(`https://api.themoviedb.org/3/search/movie/?page=${this.currentPage}&query=${query}&api_key=${process.env.MIX_TMDB_KEY}`)
+            window.axios.get(`/api/movies/search?page=${this.currentPage}&query=${this.searchQuery}`)
             .then((response) => {
-                this.movies = response.data
+                this.movies = response.data.movies
             })
             .catch((error) => {
                 console.log(error)

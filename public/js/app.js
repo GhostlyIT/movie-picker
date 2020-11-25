@@ -1959,7 +1959,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['link'],
   data: function data() {
     return {
       movies: false,
@@ -1971,24 +1973,26 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var _this = this;
 
-    this.getMovies(this.filter);
-    var params = new URL(document.location).searchParams;
-    var movieList = params.get("movie_list").split(',').map(function (el) {
-      return +el;
-    });
-    console.log(movieList);
-    movieList.forEach(function (movieId) {
-      _this.pickMovie(movieId);
-    });
+    this.getMovies();
+
+    if (this.link != '') {
+      window.axios.get("/api/link/get?link=".concat(this.link)).then(function (response) {
+        console.log(response);
+        var movies = response.data.movies;
+        movies.forEach(function (movie) {
+          _this.pickMovie(movie.movie_id);
+        });
+      });
+    }
   },
   methods: {
     getMovies: function getMovies() {
       var _this2 = this;
 
-      window.axios.get("https://api.themoviedb.org/3/movie/".concat(this.filter, "?page=").concat(this.currentPage, "&api_key=").concat("7d53b98f6d2eeef318c7a81e81e9766b")).then(function (response) {
+      window.axios.get("/api/movies/get?filter=".concat(this.filter, "&page=").concat(this.currentPage)).then(function (response) {
         _this2.movies = _this2.filter === 'latest' ? {
-          results: [response.data]
-        } : response.data;
+          results: [response.data.movies]
+        } : response.data.movies;
       })["catch"](function (error) {
         console.log(error);
       });
@@ -2020,8 +2024,8 @@ __webpack_require__.r(__webpack_exports__);
 
       this.filter = 'search';
       this.searchQuery = query;
-      window.axios.get("https://api.themoviedb.org/3/search/movie/?page=".concat(this.currentPage, "&query=").concat(query, "&api_key=").concat("7d53b98f6d2eeef318c7a81e81e9766b")).then(function (response) {
-        _this3.movies = response.data;
+      window.axios.get("/api/movies/search?page=".concat(this.currentPage, "&query=").concat(this.searchQuery)).then(function (response) {
+        _this3.movies = response.data.movies;
       })["catch"](function (error) {
         console.log(error);
       });
@@ -2082,8 +2086,8 @@ __webpack_require__.r(__webpack_exports__);
 
       this.movies = [];
       this.$store.state.pickedMovies.forEach(function (movieId) {
-        window.axios.get("https://api.themoviedb.org/3/movie/".concat(movieId, "?api_key=").concat("7d53b98f6d2eeef318c7a81e81e9766b")).then(function (response) {
-          _this.movies.push(response.data);
+        window.axios.get("/api/movies/get/single?movie_id=".concat(movieId)).then(function (response) {
+          _this.movies.push(response.data.movie);
         })["catch"](function (error) {
           console.log(error);
         });
@@ -2103,15 +2107,13 @@ __webpack_require__.r(__webpack_exports__);
       this.$store.dispatch('resetPickedMovies');
     },
     share: function share() {
-      var shareLink = location.protocol + '//' + location.hostname + '/?movie_list=';
-      this.$store.state.pickedMovies.forEach(function (el, i, arr) {
-        shareLink += el;
+      var _this2 = this;
 
-        if (i + 1 < arr.length) {
-          shareLink += ',';
-        }
+      window.axios.post("/api/link/store", {
+        movies: this.$store.state.pickedMovies
+      }).then(function (response) {
+        _this2.linkToShare = location.protocol + '//' + location.hostname + '/' + response.data.link;
       });
-      this.linkToShare = shareLink;
     }
   },
   computed: {
@@ -37803,6 +37805,8 @@ var render = function() {
     "div",
     { staticClass: "container component", attrs: { id: "movies" } },
     [
+      _c("h1", [_vm._v(_vm._s(_vm.link))]),
+      _vm._v(" "),
       _c("search", { attrs: { search: _vm.search } }),
       _vm._v(" "),
       _c("filter-buttons", { attrs: { changeFilter: _vm.changeFilter } }),

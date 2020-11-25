@@ -37,9 +37,9 @@ export default {
         getPickedMovies() {
             this.movies = []
             this.$store.state.pickedMovies.forEach(movieId => {
-                window.axios.get(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.MIX_TMDB_KEY}`)
+                window.axios.get(`/api/movies/get/single?movie_id=${movieId}`)
                 .then((response) => {
-                    this.movies.push(response.data)
+                    this.movies.push(response.data.movie)
                 })
                 .catch((error) => {
                     console.log(error)
@@ -63,14 +63,10 @@ export default {
         },
 
         share() {
-            let shareLink = location.protocol + '//' + location.hostname + '/?movie_list=';
-            this.$store.state.pickedMovies.forEach((el, i, arr) => {
-                shareLink += el
-                if (i + 1 < arr.length) {
-                    shareLink += ','
-                }
+            window.axios.post(`/api/link/store`, {movies: this.$store.state.pickedMovies})
+            .then((response) => {
+                this.linkToShare =  location.protocol + '//' + location.hostname + '/' + response.data.link
             })
-            this.linkToShare = shareLink
         }
     },
     computed: {

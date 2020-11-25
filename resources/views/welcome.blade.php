@@ -23,7 +23,7 @@
     </head>
     <body class="antialiased">
         <div id="app">
-            <movies></movies>
+            <movies link="{{$link}}"></movies>
         </div>
 
         <script src="{{ mix('js/app.js') }}"></script>

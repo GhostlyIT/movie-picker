@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::post('link/store', 'App\Http\Controllers\LinkController@store');
+Route::get('link/get', 'App\Http\Controllers\LinkController@get');
+Route::get('movies/get', 'App\Http\Controllers\MovieController@get');
+Route::get('movies/search', 'App\Http\Controllers\MovieController@search');
+Route::get('movies/get/single', 'App\Http\Controllers\MovieController@getSingle');
